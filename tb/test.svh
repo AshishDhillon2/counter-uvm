@@ -17,13 +17,14 @@ class test extends uvm_test;
     endfunction
 
     task run_phase(uvm_phase phase);
+        control_seq ctrl;
         reset_seq  rst;
         count_seq  cnt;
         random_seq rnd;
 
         phase.raise_objection(this);
 
-        // Directed: overflow at a value that is not a power of two, then wrap to 1
+
         `uvm_info("TEST", "Directed: overflow_val = 3", UVM_LOW)
         rst = reset_seq::type_id::create("rst");
         rst.start(env.agt.sqr);
@@ -40,6 +41,8 @@ class test extends uvm_test;
         cnt.overflow_val = '1;
         cnt.cycles       = (1 << NBITS) + 1;
         cnt.start(env.agt.sqr);
+        ctrl = control_seq::type_id::create("ctrl");
+        ctrl.start(env.agt.sqr);
 
         // Random: resets, clears, enables, and overflow values
         rnd = random_seq::type_id::create("rnd");
